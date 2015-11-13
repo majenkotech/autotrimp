@@ -6,7 +6,7 @@ var hkeysSorted = [];
 var premapscounter = 0;
 var buildcounter = 0;
 var autoTSettings = {};
-var version = "0.37b2";
+var version = "0.37b3";
 var wasgathering = "";
 var badguyMinAtt = 0;
 var badguyMaxAtt = 0;
@@ -271,28 +271,30 @@ function buyGemCheapestHousing() {
                     message("Still building huts. Why do they still live there??", "Loot", "*eye2", "exotic")
                 }
             }
-        } else if(game.buildings.House.locked == 0){
-
-                var grHouse=getBuildingItemPrice(game.buildings.House, "food")/ game.buildings.House.increase.by;
-                var grHut=getBuildingItemPrice(game.buildings.Hut, "food")/ game.buildings.Hut.increase.by; 
-                if(grHouse < grHut){
-                    if(canAffordBuilding("House")){
-                        buyBuilding("House");
-                        tooltip("hide");
-                        message("Bought us more houses, More houses = more trimps!", "Loot", "*eye2", "exotic")
+        }
+    } else if(game.buildings.House.locked == 0){
+        if (autoTSettings.autohousing.enabled == 1) {
+            var grHouse=getBuildingItemPrice(game.buildings.House, "food")/ game.buildings.House.increase.by;
+            var grHut=getBuildingItemPrice(game.buildings.Hut, "food")/ game.buildings.Hut.increase.by; 
+            if(grHouse < grHut){
+                if(canAffordBuilding("House")){
+                    buyBuilding("House");
+                    tooltip("hide");
+                    message("Bought us more houses, More houses = more trimps!", "Loot", "*eye2", "exotic")
                 }
-                    } else {
-                    if(canAffordBuilding("Hut")){
-                        buyBuilding("Hut");
-                        tooltip("hide");
-                        message("Huts for trimps. I bet they would prefer a house!", "Loot", "*eye2", "exotic")
-                    }
+            } else {
+                if(canAffordBuilding("Hut")){
+                    buyBuilding("Hut");
+                    tooltip("hide");
+                    message("Huts for trimps. I bet they would prefer a house!", "Loot", "*eye2", "exotic")
                 }
-        } else if(canAffordBuilding("Hut")){
+            }
+        }
+    } else if(canAffordBuilding("Hut")){
+        if (autoTSettings.autohousing.enabled == 1) {
             buyBuilding("Hut");
             tooltip("hide");
             message("And another hut down!", "Loot", "*eye2", "exotic")
-
         }
     }
 
