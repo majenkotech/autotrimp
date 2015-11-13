@@ -228,6 +228,12 @@ function buyGemCheapestHousing() {
     game.global.buyAmt = 1;
     var ahousing = ["Mansion", "Hotel", "Resort", "Collector", "Warpstation"];
     var ghousing = [];
+    var ahmessage = {   Mansion: "Looks like Lady Trimpington has bought a new wing for Trimpington Hall",
+                        Hotel: "It's getting like the sea front at Trimpton-super-mare here!",
+                        Resort: "Butlins at Trimpness just keeps getting bigger",
+                        Collector: "We found a collector collecting dust. Adding it to your collection",
+                        Warpstation: "Warp 9.8. Cap'n, the engine canne take it much longer"
+                    };
     for (ahouse in ahousing) {
         if (game.buildings[ahousing[ahouse]].locked == 0) {
             ghousing.push(ahousing[ahouse]);
@@ -247,7 +253,7 @@ function buyGemCheapestHousing() {
             if (canAffordBuilding(keysSorted[0])){
                 buyBuilding(keysSorted[0]);
                 tooltip("hide");
-                message("Bought us more gem fuelled housing.", "Loot", "*eye2", "exotic")
+                message(ahmessage[keysSorted[0]], "Loot", "*eye2", "exotic");
             }
         }
 
