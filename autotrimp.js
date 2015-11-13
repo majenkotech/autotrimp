@@ -71,7 +71,7 @@ else {
 	var autoformations = {enabled: 0, description: "Automatically switch between Heap and Dominance formations based on enemy", titles: ["Not Switching", "Switching"]};
 	var autosnimps = {enabled: 0, description: "I'll automatically buy items to help us get past snimps, squimps, and other fast enemies", titles: ["Not Avoiding", "Avoiding"]};
 	var automapbmax = {enabled: 0, description: "I'll manage turning map repeat on and off so we can reach the max map bonus", titles: ["Not Managing", "Managing"]};
-	var autohousing = {enabled: 0, description: "I'll try and buy the best housing for you when we can afford it", titles: ["Not Buying", "Buying"]};
+	var autohousing = {enabled: 0, description: "I'll try and buy the best housing for you when we can afford it", titles: ["Not Buying", "Buy All", "Only Good"]};
 	autoTSettings = {versioning: version, autobuildings: autobuildings, autogymbutes: autogymbutes, autoupgrades: autoupgrades, autohighlight: autohighlight, autopremaps: autopremaps, autogather: autogather, automapbmax: automapbmax, autosnimps: autosnimps, autoformations: autoformations, autohousing: autohousing};
 }
 
@@ -251,47 +251,49 @@ function buyGemCheapestHousing() {
             }
         }
 
-        var grMansion=getBuildingItemPrice(game.buildings.Mansion, "food")/ game.buildings.Mansion.increase.by;
-        var grHouse=getBuildingItemPrice(game.buildings.House, "food")/ game.buildings.House.increase.by;
-        var grHut=getBuildingItemPrice(game.buildings.Hut, "food")/ game.buildings.Hut.increase.by; 
-        if(grMansion > grHouse){
-            var buildbuilding = game.buildings.House;
-            if(canAffordBuilding("House")){
-                buyBuilding("House");
-                tooltip("hide");
-                message("Bought us more houses. It ain't no mansion though!", "Loot", "*eye2", "exotic")
-            }
-        }
-        if(grMansion > grHut){
-            var buildbuilding = game.buildings.House;
-            if(canAffordBuilding("Hut")){
-                buyBuilding("Hut");
-                tooltip("hide");
-                message("Still building huts. Why do they still live there??", "Loot", "*eye2", "exotic")
-            }
-        }
-    } else if(game.buildings.House.locked == 0){
-
+        if (autoTSettings.autohousing.enabled == 1) {
+            var grMansion=getBuildingItemPrice(game.buildings.Mansion, "food")/ game.buildings.Mansion.increase.by;
             var grHouse=getBuildingItemPrice(game.buildings.House, "food")/ game.buildings.House.increase.by;
             var grHut=getBuildingItemPrice(game.buildings.Hut, "food")/ game.buildings.Hut.increase.by; 
-            if(grHouse < grHut){
+            if(grMansion > grHouse){
+                var buildbuilding = game.buildings.House;
                 if(canAffordBuilding("House")){
                     buyBuilding("House");
                     tooltip("hide");
-                    message("Bought us more houses, More houses = more trimps!", "Loot", "*eye2", "exotic")
+                    message("Bought us more houses. It ain't no mansion though!", "Loot", "*eye2", "exotic")
                 }
-            } else {
+            }
+            if(grMansion > grHut){
+                var buildbuilding = game.buildings.House;
                 if(canAffordBuilding("Hut")){
                     buyBuilding("Hut");
                     tooltip("hide");
-                    message("Huts for trimps. I bet they would prefer a house!", "Loot", "*eye2", "exotic")
+                    message("Still building huts. Why do they still live there??", "Loot", "*eye2", "exotic")
                 }
             }
-    } else if(canAffordBuilding("Hut")){
-        buyBuilding("Hut");
-        tooltip("hide");
-        message("And another hut down!", "Loot", "*eye2", "exotic")
+        } else if(game.buildings.House.locked == 0){
 
+                var grHouse=getBuildingItemPrice(game.buildings.House, "food")/ game.buildings.House.increase.by;
+                var grHut=getBuildingItemPrice(game.buildings.Hut, "food")/ game.buildings.Hut.increase.by; 
+                if(grHouse < grHut){
+                    if(canAffordBuilding("House")){
+                        buyBuilding("House");
+                        tooltip("hide");
+                        message("Bought us more houses, More houses = more trimps!", "Loot", "*eye2", "exotic")
+                }
+                    } else {
+                    if(canAffordBuilding("Hut")){
+                        buyBuilding("Hut");
+                        tooltip("hide");
+                        message("Huts for trimps. I bet they would prefer a house!", "Loot", "*eye2", "exotic")
+                    }
+                }
+        } else if(canAffordBuilding("Hut")){
+            buyBuilding("Hut");
+            tooltip("hide");
+            message("And another hut down!", "Loot", "*eye2", "exotic")
+
+        }
     }
 
     if (game.buildings.Gateway.locked == 0) {
@@ -329,7 +331,7 @@ if (autoTSettings.autobuildings.enabled == 1) {
   }
 }
 
-if (autoTSettings.autohousing.enabled == 1) {
+if (autoTSettings.autohousing.enabled >= 1) {
     buyGemCheapestHousing();
 }
 
